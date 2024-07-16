@@ -31,16 +31,19 @@ animePath = 'anime-dataset-2023.csv'
 anime = pd.read_csv(animePath)
 
 # Preprocess the dataset
+st.write("Preprocessing data...")
 RecoDf = anime[['Name', 'Synopsis']]
 RecoDf['Synopsis'] = RecoDf['Synopsis'].apply(lambda x: x.split())
 RecoDf['Synopsis'] = RecoDf['Synopsis'].apply(string_cleaning)
 
 # Apply bag of words technique
+st.write("Applying bag of words...")
 x_bow = RecoDf['Synopsis'].apply(lambda x: ' '.join(x))
 vectorizer = CountVectorizer(ngram_range=(1, 1), max_features=5000)
 new_column = (vectorizer.fit_transform(x_bow)).toarray()
 
 # Calculate cosine similarity
+st.write("Calculating cosine similarity...")
 similarities = cosine_similarity(new_column)
 
 # Define recommendation function
@@ -65,7 +68,10 @@ st.write("This application provides anime recommendations based on the synopsis 
 selected_anime = st.selectbox("Select an Anime", anime['Name'].values)
 
 if st.button("Get Recommendations"):
+    st.write("Fetching recommendations...")
     recommendations = get_anime_recommendation(selected_anime)
     st.write("Top 5 recommendations based on the selected anime:")
     for rec in recommendations:
         st.write(rec)
+
+st.write("Done!")
