@@ -86,10 +86,17 @@ st.write("This application provides anime recommendations based on the synopsis 
 selected_anime = st.selectbox("Select an Anime", anime['Name'].values)
 
 if st.button("Get Recommendations"):
-    st.write("Fetching recommendations...")
-    recommendations = get_anime_recommendation(selected_anime)
-    st.write("Top 5 recommendations based on the selected anime:")
-    for rec in recommendations:
-        st.write(rec)
-
-st.write("Done!")
+    recommendations, index, normal_list, ranking_list = get_anime_recommendation(selected_anime)
+    
+    st.write(f"Selected Anime: {selected_anime}")
+    st.write(f"Index of Selected Anime: {index}")
+    
+    st.write("### Sorted Similarity Scores")
+    st.write(pd.DataFrame({
+        'Index': [item[0] for item in ranking_list],
+        'Similarity Score': [item[1] for item in ranking_list]
+    }).head(10))
+    
+    st.write("### Top 5 Recommendations")
+    for rec, score in recommendations:
+        st.write(f"{rec} (Similarity Score: {score})")
