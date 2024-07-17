@@ -41,15 +41,28 @@ RecoDf = anime[['Name', 'Synopsis']]
 RecoDf['Synopsis'] = RecoDf['Synopsis'].apply(lambda x: x.split())
 RecoDf['Synopsis'] = RecoDf['Synopsis'].apply(string_cleaning)
 
+# Display the preprocessed data
+st.write("### Preprocessed Data")
+st.dataframe(RecoDf)
+
+
 # Apply bag of words technique
 st.write("Applying bag of words...")
 x_bow = RecoDf['Synopsis'].apply(lambda x: ' '.join(x))
 vectorizer = CountVectorizer(ngram_range=(1, 1), max_features=5000)
 new_column = (vectorizer.fit_transform(x_bow)).toarray()
 
+# Display the bag of words result
+st.write("### Bag of Words Result")
+st.write(pd.DataFrame(new_column, columns=vectorizer.get_feature_names_out()))
+
 # Calculate cosine similarity
 st.write("Calculating cosine similarity...")
 similarities = cosine_similarity(new_column)
+
+# Display a portion of the cosine similarity matrix
+st.write("### Cosine Similarity Matrix (First 10 Rows and Columns)")
+st.write(pd.DataFrame(similarities[:10, :10]))
 
 # Define recommendation function
 def get_anime_recommendation(name):
