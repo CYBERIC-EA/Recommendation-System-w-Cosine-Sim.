@@ -29,6 +29,11 @@ def string_cleaning(string_list):
 # Load dataset
 animePath = 'anime-dataset-2023.csv'
 anime = pd.read_csv(animePath)
+anime = anime.head(5000)
+
+# Display the dataframe
+st.write("Displaying the dataframe:")
+st.dataframe(anime)
 
 # Preprocess the dataset
 st.write("Preprocessing data...")
