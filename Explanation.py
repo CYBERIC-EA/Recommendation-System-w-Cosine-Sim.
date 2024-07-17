@@ -66,17 +66,36 @@ st.write(pd.DataFrame(similarities[:10, :10]))
 
 # Define recommendation function
 def get_anime_recommendation(name):
+    st.write(f"### Process for: {name}")
+
     index = (anime.index[anime['Name'] == name])[0]
+    st.write(f"Index of Selected Anime: {index}")
+
     normal_list = similarities[index]
+    st.write("### Similarity Scores for Selected Anime")
+    st.write(pd.DataFrame({
+        'Index': range(len(normal_list)),
+        'Similarity Score': normal_list
+    }).sort_values(by='Similarity Score', ascending=False).reset_index(drop=True).head(10))
+
     ordenated_list = sorted(similarities[index], reverse=True)
     ranking_list = []
     for i in range(len(ordenated_list)):
         index_new = np.where(normal_list == ordenated_list[i])[0]
         tuple_anime = (int(index_new[0]), ordenated_list[i])
         ranking_list.append(tuple_anime)
+    st.write("### Sorted Similarity Scores with Corresponding Indexes")
+    st.write(pd.DataFrame({
+        'Index': [item[0] for item in ranking_list],
+        'Similarity Score': [item[1] for item in ranking_list]
+    }).head(10))
+
     recommendations = []
     for tuple_values in ranking_list[1:6]:
-        recommendations.append(RecoDf.iloc[tuple_values[0]]['Name'])
+        recommendations.append((RecoDf.iloc[tuple_values[0]]['Name'], tuple_values[1]))
+    st.write("### Top 5 Recommendations")
+    for rec, score in recommendations:
+        st.write(f"{rec} (Similarity Score: {score})")
     return recommendations
 
 # Streamlit UI
