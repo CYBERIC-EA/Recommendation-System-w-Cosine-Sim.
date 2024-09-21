@@ -126,7 +126,6 @@ networkx==3.2.1
 nltk==3.8.1
 notebook==7.0.7
 notebook_shim==0.2.3
-numba==0.58.1
 numpy==1.26.2
 oauthlib==3.2.2
 openpyxl==3.1.2
